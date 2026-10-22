@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: account-service
+              uri: http://account-service:8080
+              predicates:
+                - Path=/api/v1/accounts/**
+              filters:
+                - RewritePath=/api/v1/accounts(?<segment>.*), /api/accounts$\{segment}
+            - id: transaction-service
+              uri: http://transaction-service:8081
+              predicates:
+                - Path=/api/v1/transactions/**
+              filters:
+                - RewritePath=/api/v1/transactions(?<segment>.*), /api/transfers$\{segment}
+server:
+  port: 80
